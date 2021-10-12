@@ -20,12 +20,14 @@ public interface ICategoryReadDAO {
             @Result(column = "weight", property = "weight"),
             @Result(column = "deleted", property = "deleted"),
             @Result(column = "create_time", property = "createTime"),
-            @Result(column = "update_time", property = "updateTime"),
+            @Result(column = "update_time", property = "updateTime")
     })
-    @ResultMap("categoryResult")
+
     @Select("select * from category where category_type = #{categoryType}")
     List<CategoryDO> getCategoryListByType(@Param("categoryType") int categoryType);
 
+
     @Select("select * from category where parent_id = #{parentId} and category_type = #{categoryType}")
+    @ResultMap("categoryResult")
     List<CategoryDO> getCategoryListByParentId(@Param("parentId") int parentId, @Param("categoryType") int categoryType);
 }

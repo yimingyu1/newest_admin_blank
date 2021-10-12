@@ -23,5 +23,23 @@ public class CategoryController {
         return  categoryBiz.insertCategory(categoryParam);
     }
 
+    @GetMapping(path = "/getCategoryByType.json")
+    public ApiResponse<Object> getCategoryByType(@RequestParam(name = "categoryType") int categoryType){
+        return  categoryBiz.getCategoriesByType(categoryType);
+    }
+
+    @GetMapping(path = "/getCategoryByParentId.json")
+    public ApiResponse<Object> getCategoryByParentId(@RequestParam(name = "categoryType") int categoryType,
+                                                     @RequestParam(name = "categoryParentId") int categoryParentId){
+        return  categoryBiz.getCategoriesByParent(categoryType, categoryParentId);
+    }
+
+    @PostMapping(path = "/update.json")
+    public ApiResponse<Object> updateCategory(@RequestBody CategoryParam categoryParam){
+        return  categoryBiz.updateCategory(categoryParam);
+    }
+
+
+
 
 }

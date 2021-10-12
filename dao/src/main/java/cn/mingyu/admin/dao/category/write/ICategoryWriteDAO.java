@@ -15,7 +15,7 @@ public interface ICategoryWriteDAO {
             "(#{parentId}, #{categoryName}, #{categoryType}, #{weight}, #{deleted}, #{createTime}, #{updateTime})")
     int insertCategory(CategoryDO category);
 
-    @Update("upadte table set parent_id = #{parentId}, category_name = #{categoryName}, category_type = #{categoryType}" +
+    @Update("update category set parent_id = #{parentId}, category_name = #{categoryName}, category_type = #{categoryType}, update_time = #{updateTime}" +
             " where id = #{id}")
     int updateCategory(CategoryDO category);
 }
