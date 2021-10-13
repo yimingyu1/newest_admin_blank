@@ -15,5 +15,9 @@ public interface ICategoryService {
 
     List<CategoryModel> getCategoriesByParentId(int parentId, int categoryType);
 
+    List<CategoryModel> getCategoriesByTypeWithPage(int categoryType, int offset, int limit);
+
+    List<CategoryModel> getCategoriesByParentIdWithPage(int parentId, int categoryType, int offset, int limit);
+
     int updateCategory(CategoryModel categoryModel);
 }

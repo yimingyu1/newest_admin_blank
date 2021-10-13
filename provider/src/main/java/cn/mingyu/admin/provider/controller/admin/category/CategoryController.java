@@ -24,14 +24,18 @@ public class CategoryController {
     }
 
     @GetMapping(path = "/getCategoryByType.json")
-    public ApiResponse<Object> getCategoryByType(@RequestParam(name = "categoryType") int categoryType){
-        return  categoryBiz.getCategoriesByType(categoryType);
+    public ApiResponse<Object> getCategoryByType(@RequestParam(name = "categoryType") int categoryType,
+                                                 @RequestParam(name = "offset", defaultValue = "0") int offset,
+                                                 @RequestParam(name = "limit", defaultValue = "10") int limit){
+        return  categoryBiz.getCategoriesByType(categoryType, offset, limit);
     }
 
     @GetMapping(path = "/getCategoryByParentId.json")
     public ApiResponse<Object> getCategoryByParentId(@RequestParam(name = "categoryType") int categoryType,
-                                                     @RequestParam(name = "categoryParentId") int categoryParentId){
-        return  categoryBiz.getCategoriesByParent(categoryType, categoryParentId);
+                                                     @RequestParam(name = "categoryParentId") int categoryParentId,
+                                                     @RequestParam(name = "offset", defaultValue = "0") int offset,
+                                                     @RequestParam(name = "limit", defaultValue = "10") int limit){
+        return  categoryBiz.getCategoriesByParent(categoryType, categoryParentId, offset, limit);
     }
 
     @PostMapping(path = "/update.json")

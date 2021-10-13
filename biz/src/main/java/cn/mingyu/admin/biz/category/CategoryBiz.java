@@ -41,20 +41,16 @@ public class CategoryBiz {
         return ApiResponse.buildFail("内部错误");
     }
 
-    public ApiResponse<Object> getCategoriesByType(int categoryType){
-        List<CategoryModel> categoryModels = categoryService.getCategoriesByType(categoryType);
-        Paging paging = new Paging();
-        paging.setTotal(categoryModels.size());
-        List<CategoryVO> categoryVOS = converter2CategoryVOBatch(categoryModels);
-        return ApiResponse.buildSuccess(categoryVOS, paging);
+    public ApiResponse<Object> getCategoriesByType(int categoryType, int offset, int limit){
+        List<CategoryModel> allCategoryModels = categoryService.getCategoriesByType(categoryType);
+        List<CategoryModel> categoryModels = categoryService.getCategoriesByTypeWithPage(categoryType, offset, limit);
+        return converter2CategoryVOBatch(allCategoryModels, categoryModels, offset, limit);
     }
 
-    public ApiResponse<Object> getCategoriesByParent(int categoryType, int parentId){
-        List<CategoryModel> categoryModels = categoryService.getCategoriesByParentId(parentId, categoryType);
-        Paging paging = new Paging();
-        paging.setTotal(categoryModels.size());
-        List<CategoryVO> categoryVOS = converter2CategoryVOBatch(categoryModels);
-        return ApiResponse.buildSuccess(categoryVOS, paging);
+    public ApiResponse<Object> getCategoriesByParent(int categoryType, int parentId, int offset, int limit){
+        List<CategoryModel> allCategoryModels = categoryService.getCategoriesByParentId(parentId, categoryType);
+        List<CategoryModel> categoryModels = categoryService.getCategoriesByParentIdWithPage(parentId, categoryType, offset, limit);
+        return converter2CategoryVOBatch(allCategoryModels, categoryModels, offset, limit);
     }
 
     public ApiResponse<Object> updateCategory(CategoryParam categoryParam){
@@ -74,11 +70,16 @@ public class CategoryBiz {
 
 
 
-    public static List<CategoryVO> converter2CategoryVOBatch(List<CategoryModel> categoryModels){
-        List<CategoryVO> categoryVOS = new ArrayList<>();
-        if (CollectionUtils.isEmpty(categoryModels)){
-            return categoryVOS;
+    public static ApiResponse<Object> converter2CategoryVOBatch(List<CategoryModel> allCategoryModels, List<CategoryModel> categoryModels, int offset, int limit){
+        Paging paging = new Paging();
+        paging.setTotal(allCategoryModels.size());
+        if (CollectionUtils.isEmpty(allCategoryModels)){
+            return ApiResponse.buildSuccess(allCategoryModels, paging);
         }
+        if (CollectionUtils.isEmpty(categoryModels)){
+            ApiResponse.buildFail("分页错误");
+        }
+        List<CategoryVO> categoryVOS = new ArrayList<>();
         for (CategoryModel category: categoryModels
         ) {
             CategoryVO categoryVO = new CategoryVO();
@@ -87,7 +88,7 @@ public class CategoryBiz {
             categoryVO.setCategoryType(category.getCategoryType());
             categoryVOS.add(categoryVO);
         }
-        return categoryVOS;
+        return ApiResponse.buildSuccess(categoryVOS, paging);
     }
 
 }
