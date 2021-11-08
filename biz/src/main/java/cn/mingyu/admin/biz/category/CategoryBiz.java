@@ -68,6 +68,19 @@ public class CategoryBiz {
         return ApiResponse.buildFail("内部错误");
     }
 
+    public ApiResponse<Object> updateCategoryName(CategoryParam categoryParam){
+        CategoryModel categoryModel = new CategoryModel();
+        categoryModel.setId(categoryParam.getId());
+        categoryModel.setCategoryName(categoryParam.getCategoryName());
+        LocalDateTime now = LocalDateTime.now();
+        categoryModel.setUpdateTime(now);
+        int rest = categoryService.updateCategoryName(categoryModel);
+        if (rest > 0){
+            return ApiResponse.buildSuccess();
+        }
+        return ApiResponse.buildFail("内部错误");
+    }
+
 
 
     public static ApiResponse<Object> converter2CategoryVOBatch(List<CategoryModel> allCategoryModels, List<CategoryModel> categoryModels, int offset, int limit){

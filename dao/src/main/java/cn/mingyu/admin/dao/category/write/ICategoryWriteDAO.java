@@ -18,4 +18,8 @@ public interface ICategoryWriteDAO {
     @Update("update category set parent_id = #{parentId}, category_name = #{categoryName}, category_type = #{categoryType}, update_time = #{updateTime}" +
             " where id = #{id}")
     int updateCategory(CategoryDO category);
+
+    @Update("update category set category_name = #{categoryName}, update_time = #{updateTime}" +
+            " where id = #{id}")
+    int updateCategoryName(CategoryDO category);
 }

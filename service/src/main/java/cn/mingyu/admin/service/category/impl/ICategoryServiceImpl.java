@@ -53,4 +53,9 @@ public class ICategoryServiceImpl implements ICategoryService {
         return CategoryConverter.converter2CategoryModelBatch(categoryReadDAO.getCategoryListByParentIdWithPage(parentId, categoryType, offset, limit));
 
     }
+
+    @Override
+    public int updateCategoryName(CategoryModel categoryModel) {
+        return categoryWriteDAO.updateCategoryName(CategoryConverter.converter2CategoryDO(categoryModel));
+    }
 }

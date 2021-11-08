@@ -43,6 +43,12 @@ public class CategoryController {
         return  categoryBiz.updateCategory(categoryParam);
     }
 
+    @PostMapping(path = "/updateName.json")
+    public ApiResponse<Object> updateCategoryName(@RequestBody CategoryParam categoryParam){
+        return  categoryBiz.updateCategoryName(categoryParam);
+    }
+
+
 
 
 
