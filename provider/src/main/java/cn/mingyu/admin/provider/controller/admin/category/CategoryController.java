@@ -26,8 +26,10 @@ public class CategoryController {
     @GetMapping(path = "/getCategoryByType.json")
     public ApiResponse<Object> getCategoryByType(@RequestParam(name = "categoryType") int categoryType,
                                                  @RequestParam(name = "offset", defaultValue = "0") int offset,
-                                                 @RequestParam(name = "limit", defaultValue = "10") int limit){
-        return  categoryBiz.getCategoriesByType(categoryType, offset, limit);
+                                                 @RequestParam(name = "limit", defaultValue = "10") int limit,
+                                                 @RequestParam(name = "isAllCategory", required = false, defaultValue = "false") boolean isAllCategory
+    ){
+        return  categoryBiz.getCategoriesByType(categoryType, offset, limit, isAllCategory);
     }
 
     @GetMapping(path = "/getCategoryByParentId.json")

@@ -41,16 +41,19 @@ public class CategoryBiz {
         return ApiResponse.buildFail("内部错误");
     }
 
-    public ApiResponse<Object> getCategoriesByType(int categoryType, int offset, int limit){
+    public ApiResponse<Object> getCategoriesByType(int categoryType, int offset, int limit, boolean isAllCategory){
         List<CategoryModel> allCategoryModels = categoryService.getCategoriesByType(categoryType);
-        List<CategoryModel> categoryModels = categoryService.getCategoriesByTypeWithPage(categoryType, offset, limit);
-        return converter2CategoryVOBatch(allCategoryModels, categoryModels, offset, limit);
+        List<CategoryModel> categoryModels = new ArrayList<>();
+        if (!isAllCategory) {
+            categoryModels = categoryService.getCategoriesByTypeWithPage(categoryType, offset, limit);
+        }
+        return converter2CategoryVOBatch(allCategoryModels, categoryModels, offset, limit,isAllCategory);
     }
 
     public ApiResponse<Object> getCategoriesByParent(int categoryType, int parentId, int offset, int limit){
         List<CategoryModel> allCategoryModels = categoryService.getCategoriesByParentId(parentId, categoryType);
         List<CategoryModel> categoryModels = categoryService.getCategoriesByParentIdWithPage(parentId, categoryType, offset, limit);
-        return converter2CategoryVOBatch(allCategoryModels, categoryModels, offset, limit);
+        return converter2CategoryVOBatch(allCategoryModels, categoryModels, offset, limit,false);
     }
 
     public ApiResponse<Object> updateCategory(CategoryParam categoryParam){
@@ -83,13 +86,20 @@ public class CategoryBiz {
 
 
 
-    public static ApiResponse<Object> converter2CategoryVOBatch(List<CategoryModel> allCategoryModels, List<CategoryModel> categoryModels, int offset, int limit){
+    public static ApiResponse<Object> converter2CategoryVOBatch(List<CategoryModel> allCategoryModels,
+                                                                List<CategoryModel> categoryModels,
+                                                                int offset, int limit, boolean isAllCategory){
         Paging paging = new Paging();
+        paging.setLimit(limit);
+        paging.setOffset(offset);
         paging.setTotal(allCategoryModels.size());
         if (CollectionUtils.isEmpty(allCategoryModels)){
             return ApiResponse.buildSuccess(allCategoryModels, paging);
         }
-        if (CollectionUtils.isEmpty(categoryModels)){
+        if (isAllCategory){
+            categoryModels = allCategoryModels;
+            paging.setLimit(allCategoryModels.size());
+        }else if (CollectionUtils.isEmpty(categoryModels)){
             ApiResponse.buildFail("分页错误");
         }
         List<CategoryVO> categoryVOS = new ArrayList<>();
